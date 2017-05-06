@@ -1,0 +1,171 @@
+##
+##  Automaticly created by Ofir Even-chen and Yogev Laks Script
+####
+##  Automaticly created by Ofir Even-chen and Yogev Laks Script
+##
+
+VERSION 5.6 ;
+
+BUSBITCHARS "[]" ;
+DIVIDERCHAR "/" ;
+
+UNITS
+  DATABASE MICRONS 2000 ;
+END UNITS
+
+MACRO CDK_R256X16
+  CLASS BLOCK ;
+  SIZE X_VALUE_SWITCH_LATER BY Y_VALUE_SWITCH_LATER ;
+  FOREIGN CDK_R256X16 0.0000 0.0000 ;
+  ORIGIN 0 0 ;
+  SYMMETRY X Y R90 ;
+  PIN ADDRESS[1]
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 12.0 19.0 12.66 19.66 ;
+      LAYER Metal6 ;
+	RECT 12.0 19.0 12.66 19.66 ;
+      LAYER Metal3 ;
+	RECT 12.0 19.0 12.66 19.66 ;
+      LAYER Metal4 ;
+	RECT 12.0 19.0 12.66 19.66 ;
+    END
+  END ADDRESS[1]
+  PIN ADDRESS[0]
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 12.0 12.0 12.66 12.66 ;
+      LAYER Metal6 ;
+	RECT 12.0 12.0 12.66 12.66 ;
+      LAYER Metal3 ;
+	RECT 12.0 12.0 12.66 12.66 ;
+      LAYER Metal4 ;
+	RECT 12.0 12.0 12.66 12.66 ;
+    END
+  END ADDRESS[0]
+  PIN DATA_IN[1]
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 19.66 26.66 20.32 27.32 ;
+      LAYER Metal6 ;
+	RECT 19.66 26.66 20.32 27.32 ;
+      LAYER Metal3 ;
+	RECT 19.66 26.66 20.32 27.32 ;
+      LAYER Metal4 ;
+	RECT 19.66 26.66 20.32 27.32 ;
+    END
+  END DATA_IN[1]
+  PIN DATA_IN[0]
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 19.66 19.66 20.32 20.32 ;
+      LAYER Metal6 ;
+	RECT 19.66 19.66 20.32 20.32 ;
+      LAYER Metal3 ;
+	RECT 19.66 19.66 20.32 20.32 ;
+      LAYER Metal4 ;
+	RECT 19.66 19.66 20.32 20.32 ;
+    END
+  END DATA_IN[0]
+  PIN DATA_OUT[1]
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 27.32 34.32 27.98 34.98 ;
+      LAYER Metal6 ;
+	RECT 27.32 34.32 27.98 34.98 ;
+      LAYER Metal3 ;
+	RECT 27.32 34.32 27.98 34.98 ;
+      LAYER Metal4 ;
+	RECT 27.32 34.32 27.98 34.98 ;
+    END
+  END DATA_OUT[1]
+  PIN DATA_OUT[0]
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 27.32 27.32 27.98 27.98 ;
+      LAYER Metal6 ;
+	RECT 27.32 27.32 27.98 27.98 ;
+      LAYER Metal3 ;
+	RECT 27.32 27.32 27.98 27.98 ;
+      LAYER Metal4 ;
+	RECT 27.32 27.32 27.98 27.98 ;
+    END
+  END DATA_OUT[0]
+  PIN CLOCK
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 34.98 34.98 35.64 35.64 ;
+      LAYER Metal6 ;
+	RECT 34.98 34.98 35.64 35.64 ;
+      LAYER Metal3 ;
+	RECT 34.98 34.98 35.64 35.64 ;
+      LAYER Metal4 ;
+	RECT 34.98 34.98 35.64 35.64 ;
+    END
+  END CLOCK
+  PIN WR_ENABLE
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 42.64 42.64 43.3 43.3 ;
+      LAYER Metal6 ;
+	RECT 42.64 42.64 43.3 43.3 ;
+      LAYER Metal3 ;
+	RECT 42.64 42.64 43.3 43.3 ;
+      LAYER Metal4 ;
+	RECT 42.64 42.64 43.3 43.3 ;
+    END
+  END WR_ENABLE
+  PIN ENABLE
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 50.3 50.3 50.96 50.96 ;
+      LAYER Metal6 ;
+	RECT 50.3 50.3 50.96 50.96 ;
+      LAYER Metal3 ;
+	RECT 50.3 50.3 50.96 50.96 ;
+      LAYER Metal4 ;
+	RECT 50.3 50.3 50.96 50.96 ;
+    END
+  END ENABLE
+  PIN VDD
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal1 ;
+        RECT 0 202.2 763.02 207.2 ;
+        RECT 0 0 763.02 5 ;
+      LAYER Metal2 ;
+        RECT 758.02 0 763.02 207.2 ;
+        RECT 0 0 5 207.2
+    END
+  END VDD
+  PIN VSS
+    DIRECTION {direction} ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal1 ;
+        RECT 0 202.2 763.02 207.2 ;
+        RECT 0 0 763.02 5 ;
+      LAYER Metal2 ;
+        RECT 758.02 0 763.02 207.2 ;
+        RECT 0 0 5 207.2
+    END
+  END VSS

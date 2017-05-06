@@ -1,0 +1,14 @@
+  PIN ADDRESS[<PIN_NUM>]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+ PORT
+      LAYER Metal5 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal6 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal3 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal4 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+    END
+  END ADDRESS[<PIN_NUM>]

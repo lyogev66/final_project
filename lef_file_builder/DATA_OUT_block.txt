@@ -1,0 +1,14 @@
+ PIN DATA_OUT[<PIN_NUM>]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+PORT
+      LAYER Metal5 ;
+        RECT 237.29 12.00 237.95 12.66 ;
+      LAYER Metal6 ;
+        RECT 237.29 12.00 237.95 12.66 ;
+      LAYER Metal3 ;
+        RECT 237.29 12.00 237.95 12.66 ;
+      LAYER Metal4 ;
+        RECT 237.29 12.00 237.95 12.66 ;
+    END
+ END DATA_OUT[<PIN_NUM>]

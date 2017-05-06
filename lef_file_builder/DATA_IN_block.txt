@@ -1,0 +1,14 @@
+ PIN DATA_IN[<PIN_NUM>]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER Metal5 ;
+        RECT 20.48 12 21.14 12.66 ;
+      LAYER Metal6 ;
+        RECT 20.48 12 21.14 12.66 ;
+      LAYER Metal3 ;
+        RECT 20.48 12 21.14 12.66 ;
+      LAYER Metal4 ;
+        RECT 20.48 12 21.14 12.66 ;
+    EN
+ END DATA_IN[<PIN_NUM>]
