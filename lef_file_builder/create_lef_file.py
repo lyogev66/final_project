@@ -13,27 +13,18 @@ CONST_INOUT = 102
 
 lef_name = "CDK_R256X16"  # change here
 output_file_name = lef_name  # "RAMB4_S16"
-address_pins = 2
+address_pins = 6
 data_in_pins = 2
 data_out_pins = 2
 
+x_max = 12.00
+y_max = 12.00
 
-x_min = 12.00
-y_min = 12.00
-x_max = 0.00
-y_max = 0.00
 x1_x2_delta = 0.66
 y1_y2_delta = 0.66
 pin_to_pin_x_delta = 7
 pin_to_pin_y_delta = 7
 rectangle_format = "\tRECT {current_x1} {current_y1} {current_x2} {current_y2} ;"
-# for data out pin 2 pin is 19
-# pin order is decanting
-rectLocation = dict()
-rectLocation['current_x1'] = x_min
-rectLocation['current_x2'] = x_min + x1_x2_delta
-rectLocation['current_y1'] = y_min
-rectLocation['current_y2'] = y_min + y1_y2_delta
 
 pins_list = [
     "ADDRESS",
@@ -46,15 +37,23 @@ pins_list = [
     "VSS"]
 
 pins = {
-    "ADDRESS": [CONST_IN,address_pins],
-    "DATA_IN": [CONST_IN,data_in_pins],
-    "DATA_OUT": [CONST_OUT,data_out_pins],
-    "CLOCK": [CONST_IN,1],
-    "WR_ENABLE": [CONST_IN,1],
-    "ENABLE": [CONST_IN,1],
-    "VDD": [CONST_INOUT,1],
-    "VSS": [CONST_INOUT,1],
+    "ADDRESS": [CONST_IN, address_pins],
+    "DATA_IN": [CONST_IN, data_in_pins],
+    "DATA_OUT": [CONST_OUT, data_out_pins],
+    "CLOCK": [CONST_IN, 1],
+    "WR_ENABLE": [CONST_IN, 1],
+    "ENABLE": [CONST_IN, 1],
+    "VDD": [CONST_INOUT, 1],
+    "VSS": [CONST_INOUT, 1],
 }
+
+# for data out pin 2 pin is 19
+# pin order is decanting
+rectLocation = dict()
+rectLocation['current_x1'] = x_max
+rectLocation['current_x2'] = x_max + x1_x2_delta
+rectLocation['current_y1'] = y_max
+rectLocation['current_y2'] = y_max + y1_y2_delta
 
 
 ##=======================================================================================================
@@ -87,18 +86,13 @@ def main(**kwargs):
     start_block(files_dict['start_block'])
     goOverPins()
 
-
     #
     # address(files_dict['ADDRESS_block'], address_pins)
     # dataInBlock(files_dict['DATA_IN_block'], data_in_pins)
     # dataOutBlock(files_dict['DATA_OUT_block'], data_out_pins)
-    print "max_x = {} max_y = {}".format(x_min, y_min)
+    print "max_x = {} max_y = {}".format(x_max, y_max)
     # end(files_dict['File_end_block'])
     # outfile.close()
-
-
-
-
 
 
 def start_block(myfile):
@@ -120,129 +114,112 @@ def start_block(myfile):
             outfile.write(line)
 
 
-def address(input_file, address_pins, string_to_change="<PIN_NUM>"):
-    global x_min, y_min
-    for pinNumber in range(address_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
-        input_file.seek(0)
-        rectLocation['current_x1'] = x_min
-        rectLocation['current_x2'] = x_min + x1_x2_delta
-        rectLocation['current_y1'] = y_min + pin_to_pin_y_delta * pinNumber
-        rectLocation['current_y2'] = y_min + y1_y2_delta + pin_to_pin_y_delta * pinNumber
-        for line in input_file:
-            if string_to_change in line:
-                outfile.write(line.replace(string_to_change, str(pinNumber)))
-            elif "RECT " in line:
-                outfile.write(rectangle_format.format(**rectLocation))
-            else:
-                outfile.write(line)
-    x_min = rectLocation['current_x2'] + pin_to_pin_x_delta
-    y_min = rectLocation['current_y2'] + pin_to_pin_y_delta
-
-
-def dataInBlock(input_file, data_in_pins, string_to_change="<PIN_NUM>"):
-    global x_min, y_min
-    for pinNumber in range(data_in_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
-        input_file.seek(0)
-        rectLocation['current_x1'] = x_min + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_x2'] = x_min + y1_y2_delta + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_y1'] = y_min
-        rectLocation['current_y2'] = y_min
-        for line in input_file:
-            if string_to_change in line:
-                outfile.write(line.replace(string_to_change, str(pinNumber)))
-            elif "RECT " in line:
-                outfile.write(rectangle_format.format(**rectLocation))
-            else:
-                outfile.write(line)
-    x_min = rectLocation['current_x2'] + pin_to_pin_x_delta
-    y_min = rectLocation['current_y2'] + pin_to_pin_y_delta
-
-
-def dataOutBlock(input_file, data_out_pins, string_to_change="<PIN_NUM>"):
-    global x_min, y_min
-    for pinNumber in range(data_out_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
-        input_file.seek(0)
-        rectLocation['current_x1'] = x_min + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_x2'] = x_min + y1_y2_delta + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_y1'] = y_min
-        rectLocation['current_y2'] = y_min
-        for line in input_file:
-            if string_to_change in line:
-                outfile.write(line.replace(string_to_change, str(pinNumber)))
-            elif "RECT " in line:
-                outfile.write(rectangle_format.format(**rectLocation) +"\n")
-            else:
-                outfile.write(line)
-    x_min = rectLocation['current_x2'] + pin_to_pin_x_delta
-    y_min = rectLocation['current_y2'] + pin_to_pin_y_delta
-
-
-def outblock(input_file, data_out_pins, input_pins_dict, str_a_change="<RELATED_PIN_NAME>",
-             str_b_change="<RELATED_PIN_NUM>"):
-    for out_pin_num in range(data_out_pins - 1, -1, -1):  # each out_pin
-        out_pin_string = """      pin (DATA_OUT[{}] ) {{
-        direction : output ;
-        capacitance :  0.0000;
-        max_capacitance :  0.5375;\n""".format(out_pin_num)
-        outfile.write(out_pin_string)
-
-        for input_pin_name in input_pins_dict.keys():  # each_input
-            if input_pins_dict[input_pin_name] > 1:
-                for input_pin_num in range(input_pins_dict[input_pin_name]):  # each pin in input
-                    input_file.seek(0)
-                    for line in input_file:
-                        if str_a_change in line:
-                            ###posibly dual write in related pin
-                            outfile.write(
-                                line.replace(str_a_change, str(input_pin_name) + "[").replace(str_b_change,
-                                                                                              str(input_pin_num) + "]"))
-                        else:
-                            outfile.write(line)
-
-            else:
-                input_file.seek(0)
-                for line in input_file:
-                    if str_a_change in line:
-                        outfile.write(
-                            line.replace(str_a_change, str(input_pin_name)).replace(str_b_change, ""))
-                    else:
-                        outfile.write(line)
-
-
-
-#works well for ADDRESS and DATA pins
-
 def goOverPins():
-    global x_min,y_min
+    global x_max, y_max
     for blockName in pins_list:
         blockDirection = pins[blockName][0]
         blockPinNumber = pins[blockName][1]
         for pin in range(blockPinNumber - 1, -1, -1):  # count down to zero
-            CreateRECT(blockName,pin)
-            current_string = blockString(blockName,blockDirection,pin,blockPinNumber)
+            CreateRECT(blockName, pin)
+            current_string = blockString(blockName, blockDirection, pin, blockPinNumber)
             outfile.write(current_string)
-        x_min = rectLocation['current_x2'] + pin_to_pin_x_delta
-        y_min = rectLocation['current_y2'] + pin_to_pin_y_delta
+        if blockName is not ("VSS" or "VDD"):
+            x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
+            y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
 
-def CreateRECT(BlockName,pinNumber):
+
+# def address(input_file, address_pins, string_to_change="<PIN_NUM>"):
+#     global x_max, y_max
+#     for pinNumber in range(address_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
+#         input_file.seek(0)
+#         rectLocation['current_x1'] = x_max
+#         rectLocation['current_x2'] = x_max + x1_x2_delta
+#         rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
+#         rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
+#         for line in input_file:
+#             if string_to_change in line:
+#                 outfile.write(line.replace(string_to_change, str(pinNumber)))
+#             elif "RECT " in line:
+#                 outfile.write(rectangle_format.format(**rectLocation))
+#             else:
+#                 outfile.write(line)
+#     x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
+#     y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
+
+
+# def dataInBlock(input_file, data_in_pins, string_to_change="<PIN_NUM>"):
+#     global x_max, y_max
+#     for pinNumber in range(data_in_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
+#         input_file.seek(0)
+#         rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
+#         rectLocation['current_x2'] = x_max + y1_y2_delta + pin_to_pin_x_delta * pinNumber
+#         rectLocation['current_y1'] = y_max
+#         rectLocation['current_y2'] = y_max
+#         for line in input_file:
+#             if string_to_change in line:
+#                 outfile.write(line.replace(string_to_change, str(pinNumber)))
+#             elif "RECT " in line:
+#                 outfile.write(rectangle_format.format(**rectLocation))
+#             else:
+#                 outfile.write(line)
+#     x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
+#     y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
+#
+#
+# def dataOutBlock(input_file, data_out_pins, string_to_change="<PIN_NUM>"):
+#     global x_max, y_max
+#     for pinNumber in range(data_out_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
+#         input_file.seek(0)
+#         rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
+#         rectLocation['current_x2'] = x_max + y1_y2_delta + pin_to_pin_x_delta * pinNumber
+#         rectLocation['current_y1'] = y_max
+#         rectLocation['current_y2'] = y_max
+#         for line in input_file:
+#             if string_to_change in line:
+#                 outfile.write(line.replace(string_to_change, str(pinNumber)))
+#             elif "RECT " in line:
+#                 outfile.write(rectangle_format.format(**rectLocation) + "\n")
+#             else:
+#                 outfile.write(line)
+#     x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
+#     y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
+
+
+
+
+# works well for ADDRESS and DATA pins
+
+
+
+def CreateRECT(BlockName, pinNumber):
     if BlockName == "ADDRESS":
-        rectLocation['current_x1'] = x_min
-        rectLocation['current_x2'] = x_min + x1_x2_delta
-        rectLocation['current_y1'] = y_min + pin_to_pin_y_delta * pinNumber
-        rectLocation['current_y2'] = y_min + y1_y2_delta + pin_to_pin_y_delta * pinNumber
+        rectLocation['current_x1'] = x_max
+        rectLocation['current_x2'] = x_max + x1_x2_delta
+        rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
+        rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
     elif "DATA" in BlockName:
-        rectLocation['current_x1'] = x_min
-        rectLocation['current_x2'] = x_min + x1_x2_delta
-        rectLocation['current_y1'] = y_min + pin_to_pin_y_delta * pinNumber
-        rectLocation['current_y2'] = y_min + y1_y2_delta + pin_to_pin_y_delta * pinNumber
+        rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
+        rectLocation['current_x2'] = x_max + x1_x2_delta + pin_to_pin_x_delta * pinNumber
+        rectLocation['current_y1'] = y_max
+        rectLocation['current_y2'] = y_max + y1_y2_delta
+    # elif BlockName == "VDD":
+    #     rectLocation['current_x1'] = 0
+    #     rectLocation['current_x2'] = x_max - pin_to_pin_x_delta
+    #     rectLocation['current_y1'] = 0
+    #     rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
+    # elif BlockName == "VSS":
+    #     rectLocation['current_x1'] = pin_to_pin_x_delta
+    #     rectLocation['current_x2'] = x_max - x1_x2_delta
+    #     rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
+    #     rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
     else:
-        rectLocation['current_x1'] = x_min
-        rectLocation['current_x2'] = x_min + x1_x2_delta
-        rectLocation['current_y1'] = y_min + pin_to_pin_y_delta * pinNumber
-        rectLocation['current_y2'] = y_min + y1_y2_delta + pin_to_pin_y_delta * pinNumber
+        rectLocation['current_x1'] = x_max
+        rectLocation['current_x2'] = x_max + x1_x2_delta
+        rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
+        rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
 
 
-def blockString(block_type, direction, pin_number,blockPinNumber):
+def blockString(block_type, direction, pin_number, blockPinNumber):
     if direction is CONST_IN:
         direction_str = "INPUT"
     elif direction is CONST_OUT:
@@ -257,18 +234,33 @@ def blockString(block_type, direction, pin_number,blockPinNumber):
     parameters['direction'] = direction_str
     parameters['rect_string'] = rectangle_format.format(**rectLocation)
     parameters['pin_number'] = pin_number
+    if block_type == "VSS" or block_type == "VDD":
+        return VddVssString(block_type)
+
+    # opening the block accoding to number of ports
     if blockPinNumber is 1:
         pin_string = """\
   PIN {block_type}""".format(**parameters)
-    else:
+    else:  # more than 1 pin
         pin_string = """\
   PIN {block_type}[{pin_number}]""".format(**parameters)
 
+    # this part is the same for all ports
     pin_string += """
     DIRECTION {direction} ;
     USE SIGNAL ;
-  PORT"""+str(metalType(block_type,parameters))+"""
+  PORT
+      LAYER Metal5 ;
+{rect_string}
+      LAYER Metal6 ;
+{rect_string}
+      LAYER Metal3 ;
+{rect_string}
+      LAYER Metal4 ;
+{rect_string}
     END""".format(**parameters)
+
+    # same as before closing the port
     if blockPinNumber is 1:
         pin_string += """
   END {block_type}\n""".format(**parameters)
@@ -278,32 +270,106 @@ def blockString(block_type, direction, pin_number,blockPinNumber):
 
     return pin_string
 
-def metalType(pinType,parameters):
-    if pinType == "VSS" or pinType == "VDD":
-        return metalLow(pinType,parameters)
-    else:
-        return metalHigh(parameters)
+def VddVssString(pinType):
+    vddString=VddString()
+    vssString=VssString()
+    vddVssString = vddString + vssString
+    return vddVssString
 
+def VddString():
+    # defining the parameters
+    vddRectLocation = dict()
+    lineWitdh = 5
+    offsetVdd = 13
+    offsetVss = 6
+    # defining rectangle upeer left upper right
+    #M1
+    #top line
+    vddRectLocation['m1_top_xll'] = 0
+    vddRectLocation['m1_top_yll'] = y_max + offsetVdd
+    vddRectLocation['m1_top_xur'] = x_max + offsetVdd
+    vddRectLocation['m1_top_yur'] = y_max + lineWitdh + offsetVdd
+    #bottom line
+    vddRectLocation['m1_bottom_xll'] = 0
+    vddRectLocation['m1_bottom_yll'] = 0
+    vddRectLocation['m1_bottom_xur'] = x_max + offsetVdd
+    vddRectLocation['m1_bottom_yur'] = lineWitdh
+    #M2
+    #right line
+    vddRectLocation['m2_right_xll'] = x_max + offsetVdd - lineWitdh
+    vddRectLocation['m2_right_yll'] = y_max + lineWitdh + offsetVdd
+    vddRectLocation['m2_right_xur'] = x_max + offsetVdd
+    vddRectLocation['m2_right_yur'] = lineWitdh
+    #left
+    vddRectLocation['m2_left_xll'] = 0
+    vddRectLocation['m2_left_yll'] = 0
+    vddRectLocation['m2_left_xur'] = lineWitdh
+    vddRectLocation['m2_left_yur'] = y_max + lineWitdh + offsetVdd
 
-def metalHigh(parameters):
-    return """
-      LAYER Metal5 ;
-{rect_string}
-      LAYER Metal6 ;
-{rect_string}
-      LAYER Metal3 ;
-{rect_string}
-      LAYER Metal4 ;
-{rect_string}""".format(**parameters)
-
-def metalLow(pinType,parameters):
-    return """
+    vddString = """    
+  PIN VDD
+    DIRECTION INOUT ;
+    USE POWER ;
+    SHAPE RING ;
+    PORT
       LAYER Metal1 ;
-        RECT 0 202.2 763.02 207.2 ;
-        RECT 0 0 763.02 5 ;
+        RECT {m1_top_xll} {m1_top_yll} {m1_top_xur} {m1_top_yur} ;
+        RECT {m1_bottom_xll} {m1_bottom_yll} {m1_bottom_xur} {m1_bottom_yur} ;
       LAYER Metal2 ;
-        RECT 758.02 0 763.02 207.2 ;
-        RECT 0 0 5 207.2""".format()
+        RECT {m2_right_xll} {m2_right_yll} {m2_right_xur} {m2_right_yur} ;
+        RECT {m2_left_xll} {m2_left_yll} {m2_left_xur} {m2_left_yur} ;
+    END
+  END VDD""".format(**vddRectLocation)
+    return vddString
+
+
+
+def VssString():
+    vssRectLocation = dict()
+    lineWitdh = 5
+    offsetVss = 5
+    # M1
+    # top line
+    vssRectLocation['m1_top_xll'] = 5.6
+    vssRectLocation['m1_top_yll'] = y_max + offsetVss
+    vssRectLocation['m1_top_xur'] = x_max + offsetVss
+    vssRectLocation['m1_top_yur'] = y_max + lineWitdh + offsetVss
+    # bottom line
+    vssRectLocation['m1_bottom_xll'] = 5.6
+    vssRectLocation['m1_bottom_yll'] = 5.6
+    vssRectLocation['m1_bottom_xur'] = x_max + offsetVss
+    vssRectLocation['m1_bottom_yur'] = lineWitdh
+    # M2
+    # right line
+    vssRectLocation['m2_right_xll'] = x_max + offsetVss - lineWitdh
+    vssRectLocation['m2_right_yll'] = y_max + lineWitdh + offsetVss
+    vssRectLocation['m2_right_xur'] = x_max + offsetVss
+    vssRectLocation['m2_right_yur'] = lineWitdh
+    # left
+    vssRectLocation['m2_left_xll'] = 5.6
+    vssRectLocation['m2_left_yll'] = 5.6
+    vssRectLocation['m2_left_xur'] = lineWitdh
+    vssRectLocation['m2_left_yur'] = y_max + lineWitdh + offsetVss
+    # defining the parameters
+
+    vssString = """    
+  PIN VSS
+    DIRECTION INOUT ;
+    USE GROUND ;
+    SHAPE RING ;
+    PORT
+      LAYER Metal1 ;
+        RECT {m1_top_xll} {m1_top_yll} {m1_top_xur} {m1_top_yur} ;
+        RECT {m1_bottom_xll} {m1_bottom_yll} {m1_bottom_xur} {m1_bottom_yur} ;
+      LAYER Metal2 ;
+        RECT {m2_right_xll} {m2_right_yll} {m2_right_xur} {m2_right_yur} ;
+        RECT {m2_left_xll} {m2_left_yll} {m2_left_xur} {m2_left_yur} ;
+    END
+  END VSS""".format(**vssRectLocation)
+
+    return vssString
+
+
 
 def end(input_file):
     for line in input_file:

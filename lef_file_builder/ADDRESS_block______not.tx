@@ -1,0 +1,46 @@
+  PIN ADDRESS[<ADDRESS>]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+ PORT
+      LAYER Metal5 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal6 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal3 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal4 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+    END
+  END ADDRESS[<ADDRESS>]
+
+
+########^
+y_min=12.00
+x_min=12.00
+delta_x=0.66
+delta_y=0.66
+
+for
+current_x = x_min
+current_y = y_min+7*i
+RECT current_x y_min x_min+ current_x +delta_x ;
+if max_x<current_x
+	max_x=current_x
+
+
+  PIN ADDRESS[0]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+ PORT
+      LAYER Metal5 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal6 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal3 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+      LAYER Metal4 ;
+        RECT 12.000 77.64 12.660 78.3 ;
+    END
+  END ADDRESS[0]
+
+

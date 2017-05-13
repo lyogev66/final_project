@@ -1,0 +1,89 @@
+  PIN CLOCK
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER Metal5 ;
+        RECT 386.125 12.00 386.785 12.66 ;
+      LAYER Metal6 ;
+        RECT 386.125 12.00 386.785 12.66 ;
+      LAYER Metal3 ;
+        RECT 386.125 12.00 386.785 12.66 ;
+      LAYER Metal4 ;
+        RECT 386.125 12.00 386.785 12.66 ;
+    END
+  END CLOCK
+  END WR_ENABLE
+  PIN ENABLE
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER Metal5 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+      LAYER Metal6 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+      LAYER Metal3 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+      LAYER Metal4 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+    END
+  END ENABLE
+  PIN WR_ENABLE
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER Metal5 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+      LAYER Metal6 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+      LAYER Metal3 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+      LAYER Metal4 ;
+        RECT 377.5 12.00 378.16 12.66 ;
+    END
+  PIN VDD
+    DIRECTION INOUT ;
+    USE POWER ;
+    SHAPE RING ;
+    PORT
+      LAYER Metal1 ;
+        RECT 0 202.2 763.02 207.2 ;
+        RECT 0 0 763.02 5 ;
+      LAYER Metal2 ;
+        RECT 758.02 0 763.02 207.2 ;
+        RECT 0 0 5 207.2 ;
+    END
+  END VDD
+  PIN VSS
+    DIRECTION INOUT ;
+    USE GROUND ;
+    SHAPE RING ;
+    PORT
+      LAYER Metal1 ;
+        RECT 5.6 196.6 757.42 201.6 ;
+        RECT 5.6 5.6 757.42 10.6 ;
+      LAYER Metal2 ;
+        RECT 752.42 5.6 757.42 201.6 ;
+        RECT 5.6 5.6 10.6 201.6 ;
+    END
+  END VSS
+  OBS
+    LAYER Metal1 ;
+      RECT 12 12 751.015 195.24 ;
+    LAYER Metal2 ;
+      RECT 12 12 751.015 195.24 ;
+    LAYER Metal3 ;
+      RECT 12 12 751.015 195.24 ;
+    LAYER Metal4 ;
+      RECT 12 12 751.015 195.24 ;
+    LAYER Metal5 ;
+      RECT 12 12 751.015 195.24 ;
+    LAYER Metal6 ;
+      RECT 12 12 751.015 195.24 ;
+  END
+END CDK_R512x16
+
+END LIBRARY

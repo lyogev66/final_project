@@ -19,8 +19,64 @@ MACRO CDK_R256X16
   FOREIGN CDK_R256X16 0.0000 0.0000 ;
   ORIGIN 0 0 ;
   SYMMETRY X Y R90 ;
+  PIN ADDRESS[5]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 12.0 47.0 12.66 47.66 ;
+      LAYER Metal6 ;
+	RECT 12.0 47.0 12.66 47.66 ;
+      LAYER Metal3 ;
+	RECT 12.0 47.0 12.66 47.66 ;
+      LAYER Metal4 ;
+	RECT 12.0 47.0 12.66 47.66 ;
+    END
+  END ADDRESS[5]
+  PIN ADDRESS[4]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 12.0 40.0 12.66 40.66 ;
+      LAYER Metal6 ;
+	RECT 12.0 40.0 12.66 40.66 ;
+      LAYER Metal3 ;
+	RECT 12.0 40.0 12.66 40.66 ;
+      LAYER Metal4 ;
+	RECT 12.0 40.0 12.66 40.66 ;
+    END
+  END ADDRESS[4]
+  PIN ADDRESS[3]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 12.0 33.0 12.66 33.66 ;
+      LAYER Metal6 ;
+	RECT 12.0 33.0 12.66 33.66 ;
+      LAYER Metal3 ;
+	RECT 12.0 33.0 12.66 33.66 ;
+      LAYER Metal4 ;
+	RECT 12.0 33.0 12.66 33.66 ;
+    END
+  END ADDRESS[3]
+  PIN ADDRESS[2]
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+  PORT
+      LAYER Metal5 ;
+	RECT 12.0 26.0 12.66 26.66 ;
+      LAYER Metal6 ;
+	RECT 12.0 26.0 12.66 26.66 ;
+      LAYER Metal3 ;
+	RECT 12.0 26.0 12.66 26.66 ;
+      LAYER Metal4 ;
+	RECT 12.0 26.0 12.66 26.66 ;
+    END
+  END ADDRESS[2]
   PIN ADDRESS[1]
-    DIRECTION {direction} ;
+    DIRECTION INPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
@@ -34,7 +90,7 @@ MACRO CDK_R256X16
     END
   END ADDRESS[1]
   PIN ADDRESS[0]
-    DIRECTION {direction} ;
+    DIRECTION INPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
@@ -48,21 +104,21 @@ MACRO CDK_R256X16
     END
   END ADDRESS[0]
   PIN DATA_IN[1]
-    DIRECTION {direction} ;
+    DIRECTION INPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
-	RECT 19.66 26.66 20.32 27.32 ;
+	RECT 26.66 19.66 27.32 20.32 ;
       LAYER Metal6 ;
-	RECT 19.66 26.66 20.32 27.32 ;
+	RECT 26.66 19.66 27.32 20.32 ;
       LAYER Metal3 ;
-	RECT 19.66 26.66 20.32 27.32 ;
+	RECT 26.66 19.66 27.32 20.32 ;
       LAYER Metal4 ;
-	RECT 19.66 26.66 20.32 27.32 ;
+	RECT 26.66 19.66 27.32 20.32 ;
     END
   END DATA_IN[1]
   PIN DATA_IN[0]
-    DIRECTION {direction} ;
+    DIRECTION INPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
@@ -76,21 +132,21 @@ MACRO CDK_R256X16
     END
   END DATA_IN[0]
   PIN DATA_OUT[1]
-    DIRECTION {direction} ;
+    DIRECTION OUTPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
-	RECT 27.32 34.32 27.98 34.98 ;
+	RECT 34.32 27.32 34.98 27.98 ;
       LAYER Metal6 ;
-	RECT 27.32 34.32 27.98 34.98 ;
+	RECT 34.32 27.32 34.98 27.98 ;
       LAYER Metal3 ;
-	RECT 27.32 34.32 27.98 34.98 ;
+	RECT 34.32 27.32 34.98 27.98 ;
       LAYER Metal4 ;
-	RECT 27.32 34.32 27.98 34.98 ;
+	RECT 34.32 27.32 34.98 27.98 ;
     END
   END DATA_OUT[1]
   PIN DATA_OUT[0]
-    DIRECTION {direction} ;
+    DIRECTION OUTPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
@@ -104,7 +160,7 @@ MACRO CDK_R256X16
     END
   END DATA_OUT[0]
   PIN CLOCK
-    DIRECTION {direction} ;
+    DIRECTION INPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
@@ -118,7 +174,7 @@ MACRO CDK_R256X16
     END
   END CLOCK
   PIN WR_ENABLE
-    DIRECTION {direction} ;
+    DIRECTION INPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
@@ -132,7 +188,7 @@ MACRO CDK_R256X16
     END
   END WR_ENABLE
   PIN ENABLE
-    DIRECTION {direction} ;
+    DIRECTION INPUT ;
     USE SIGNAL ;
   PORT
       LAYER Metal5 ;
@@ -145,27 +201,56 @@ MACRO CDK_R256X16
 	RECT 50.3 50.3 50.96 50.96 ;
     END
   END ENABLE
+    
   PIN VDD
-    DIRECTION {direction} ;
-    USE SIGNAL ;
-  PORT
+    DIRECTION INOUT ;
+    USE POWER ;
+    SHAPE RING ;
+    PORT
       LAYER Metal1 ;
-        RECT 0 202.2 763.02 207.2 ;
-        RECT 0 0 763.02 5 ;
+        RECT 0 70.96 70.96 75.96 ;
+        RECT 0 0 70.96 5 ;
       LAYER Metal2 ;
-        RECT 758.02 0 763.02 207.2 ;
-        RECT 0 0 5 207.2
+        RECT 65.96 75.96 70.96 5 ;
+        RECT 0 0 5 75.96 ;
     END
-  END VDD
+  END VDD    
   PIN VSS
-    DIRECTION {direction} ;
-    USE SIGNAL ;
-  PORT
+    DIRECTION INOUT ;
+    USE GROUND ;
+    SHAPE RING ;
+    PORT
       LAYER Metal1 ;
-        RECT 0 202.2 763.02 207.2 ;
-        RECT 0 0 763.02 5 ;
+        RECT 5.6 62.96 62.96 67.96 ;
+        RECT 5.6 5.6 62.96 5 ;
       LAYER Metal2 ;
-        RECT 758.02 0 763.02 207.2 ;
-        RECT 0 0 5 207.2
+        RECT 57.96 67.96 62.96 5 ;
+        RECT 5.6 5.6 5 67.96 ;
+    END
+  END VSS    
+  PIN VDD
+    DIRECTION INOUT ;
+    USE POWER ;
+    SHAPE RING ;
+    PORT
+      LAYER Metal1 ;
+        RECT 0 78.62 78.62 83.62 ;
+        RECT 0 0 78.62 5 ;
+      LAYER Metal2 ;
+        RECT 73.62 83.62 78.62 5 ;
+        RECT 0 0 5 83.62 ;
+    END
+  END VDD    
+  PIN VSS
+    DIRECTION INOUT ;
+    USE GROUND ;
+    SHAPE RING ;
+    PORT
+      LAYER Metal1 ;
+        RECT 5.6 70.62 70.62 75.62 ;
+        RECT 5.6 5.6 70.62 5 ;
+      LAYER Metal2 ;
+        RECT 65.62 75.62 70.62 5 ;
+        RECT 5.6 5.6 5 75.62 ;
     END
   END VSS
