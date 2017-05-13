@@ -13,10 +13,12 @@ CONST_INOUT = 102
 
 lef_name = "CDK_R256X16"  # change here
 output_file_name = lef_name  # "RAMB4_S16"
-address_pins = 6
+address_pins = 2
 data_in_pins = 2
 data_out_pins = 2
 
+x_init = 12.00
+y_init = 12.00
 x_max = 12.00
 y_max = 12.00
 
@@ -34,7 +36,8 @@ pins_list = [
     "WR_ENABLE",
     "ENABLE",
     "VDD",
-    "VSS"]
+    # "VSS",
+]
 
 pins = {
     "ADDRESS": [CONST_IN, address_pins],
@@ -44,7 +47,7 @@ pins = {
     "WR_ENABLE": [CONST_IN, 1],
     "ENABLE": [CONST_IN, 1],
     "VDD": [CONST_INOUT, 1],
-    "VSS": [CONST_INOUT, 1],
+    # "VSS": [CONST_INOUT, 1],
 }
 
 # for data out pin 2 pin is 19
@@ -81,18 +84,13 @@ def main(**kwargs):
 
     outfile = open(output_file_name + ".lef", "w")
 
-    print files_dict.keys()
-    # if start_f: start(files_dict['File_start_block'])
+    #writing the starting block
     start_block(files_dict['start_block'])
+    #wringing the rest of the file
     goOverPins()
 
-    #
-    # address(files_dict['ADDRESS_block'], address_pins)
-    # dataInBlock(files_dict['DATA_IN_block'], data_in_pins)
-    # dataOutBlock(files_dict['DATA_OUT_block'], data_out_pins)
     print "max_x = {} max_y = {}".format(x_max, y_max)
-    # end(files_dict['File_end_block'])
-    # outfile.close()
+    outfile.close()
 
 
 def start_block(myfile):
@@ -117,15 +115,18 @@ def start_block(myfile):
 def goOverPins():
     global x_max, y_max
     for blockName in pins_list:
-        blockDirection = pins[blockName][0]
-        blockPinNumber = pins[blockName][1]
-        for pin in range(blockPinNumber - 1, -1, -1):  # count down to zero
+        blockDirection = pins[blockName][0] #in out or inout
+        blockNuberOfPins = pins[blockName][1]
+        for pin in range(blockNuberOfPins - 1, -1, -1):  # count down to zero
             CreateRECT(blockName, pin)
-            current_string = blockString(blockName, blockDirection, pin, blockPinNumber)
+            current_string = blockString(blockName, blockDirection, pin, blockNuberOfPins)
             outfile.write(current_string)
+        #save max values
         if blockName is not ("VSS" or "VDD"):
-            x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
-            y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
+            if x_max < rectLocation['current_x2'] + pin_to_pin_x_delta:
+                x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
+            if y_max < rectLocation['current_y2'] + pin_to_pin_y_delta:
+                y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
 
 
 
@@ -140,23 +141,13 @@ def CreateRECT(BlockName, pinNumber):
     elif "DATA" in BlockName:
         rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
         rectLocation['current_x2'] = x_max + x1_x2_delta + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_y1'] = y_max
-        rectLocation['current_y2'] = y_max + y1_y2_delta
-    # elif BlockName == "VDD":
-    #     rectLocation['current_x1'] = 0
-    #     rectLocation['current_x2'] = x_max - pin_to_pin_x_delta
-    #     rectLocation['current_y1'] = 0
-    #     rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
-    # elif BlockName == "VSS":
-    #     rectLocation['current_x1'] = pin_to_pin_x_delta
-    #     rectLocation['current_x2'] = x_max - x1_x2_delta
-    #     rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
-    #     rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
+        rectLocation['current_y1'] = y_init
+        rectLocation['current_y2'] = y_init + y1_y2_delta
     else:
-        rectLocation['current_x1'] = x_max
-        rectLocation['current_x2'] = x_max + x1_x2_delta
-        rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
-        rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
+        rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
+        rectLocation['current_x2'] = x_max + x1_x2_delta + pin_to_pin_x_delta * pinNumber
+        rectLocation['current_y1'] = y_init
+        rectLocation['current_y2'] = y_init + y1_y2_delta
 
 
 def blockString(block_type, direction, pin_number, blockPinNumber):
@@ -175,7 +166,8 @@ def blockString(block_type, direction, pin_number, blockPinNumber):
     parameters['rect_string'] = rectangle_format.format(**rectLocation)
     parameters['pin_number'] = pin_number
     if block_type == "VSS" or block_type == "VDD":
-        return VddVssString(block_type)
+        return VddVssString()
+
 
     # opening the block accoding to number of ports
     if blockPinNumber is 1:
@@ -210,11 +202,9 @@ def blockString(block_type, direction, pin_number, blockPinNumber):
 
     return pin_string
 
-def VddVssString(pinType):
-    vddString=VddString()
-    vssString=VssString()
-    vddVssString = vddString + vssString
-    return vddVssString
+def VddVssString():
+
+    return VddString() + VssString() + OBSString()
 
 def VddString():
     # defining the parameters
@@ -309,7 +299,33 @@ def VssString():
 
     return vssString
 
+def OBSString():
+    obsRectLocation = dict()
 
+    obsRectLocation['xLowerLeft'] = x_init
+    obsRectLocation['yLowerLeft'] = y_init
+    obsRectLocation['xUpperRight'] = x_max
+    obsRectLocation['yUpperRight'] = y_max
+    obsString="""
+  OBS
+    LAYER Metal1 ;
+      RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
+    LAYER Metal2 ;
+      RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
+    LAYER Metal3 ;
+      RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
+    LAYER Metal4 ;
+      RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
+    LAYER Metal5 ;
+      RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
+    LAYER Metal6 ;
+      RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
+  END
+END CDK_R512x16
+
+END LIBRARY
+    """.format(**obsRectLocation)
+    return obsString
 
 def end(input_file):
     for line in input_file:
