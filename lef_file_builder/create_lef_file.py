@@ -128,68 +128,8 @@ def goOverPins():
             y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
 
 
-# def address(input_file, address_pins, string_to_change="<PIN_NUM>"):
-#     global x_max, y_max
-#     for pinNumber in range(address_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
-#         input_file.seek(0)
-#         rectLocation['current_x1'] = x_max
-#         rectLocation['current_x2'] = x_max + x1_x2_delta
-#         rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
-#         rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
-#         for line in input_file:
-#             if string_to_change in line:
-#                 outfile.write(line.replace(string_to_change, str(pinNumber)))
-#             elif "RECT " in line:
-#                 outfile.write(rectangle_format.format(**rectLocation))
-#             else:
-#                 outfile.write(line)
-#     x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
-#     y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
-
-
-# def dataInBlock(input_file, data_in_pins, string_to_change="<PIN_NUM>"):
-#     global x_max, y_max
-#     for pinNumber in range(data_in_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
-#         input_file.seek(0)
-#         rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
-#         rectLocation['current_x2'] = x_max + y1_y2_delta + pin_to_pin_x_delta * pinNumber
-#         rectLocation['current_y1'] = y_max
-#         rectLocation['current_y2'] = y_max
-#         for line in input_file:
-#             if string_to_change in line:
-#                 outfile.write(line.replace(string_to_change, str(pinNumber)))
-#             elif "RECT " in line:
-#                 outfile.write(rectangle_format.format(**rectLocation))
-#             else:
-#                 outfile.write(line)
-#     x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
-#     y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
-#
-#
-# def dataOutBlock(input_file, data_out_pins, string_to_change="<PIN_NUM>"):
-#     global x_max, y_max
-#     for pinNumber in range(data_out_pins - 1, -1, -1):  # count down to zero #(address_pins):  #
-#         input_file.seek(0)
-#         rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
-#         rectLocation['current_x2'] = x_max + y1_y2_delta + pin_to_pin_x_delta * pinNumber
-#         rectLocation['current_y1'] = y_max
-#         rectLocation['current_y2'] = y_max
-#         for line in input_file:
-#             if string_to_change in line:
-#                 outfile.write(line.replace(string_to_change, str(pinNumber)))
-#             elif "RECT " in line:
-#                 outfile.write(rectangle_format.format(**rectLocation) + "\n")
-#             else:
-#                 outfile.write(line)
-#     x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
-#     y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
-
-
-
 
 # works well for ADDRESS and DATA pins
-
-
 
 def CreateRECT(BlockName, pinNumber):
     if BlockName == "ADDRESS":
