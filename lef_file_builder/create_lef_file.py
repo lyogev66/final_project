@@ -13,9 +13,9 @@ CONST_INOUT = 102
 
 lef_name = "CDK_R256X16"  # change here
 output_file_name = lef_name  # "RAMB4_S16"
-address_pins = 2
-data_in_pins = 2
-data_out_pins = 2
+address_pins = 8
+data_in_pins = 16
+data_out_pins = 16
 
 x_init = 12.00
 y_init = 12.00
@@ -117,16 +117,17 @@ def goOverPins():
     for blockName in pins_list:
         blockDirection = pins[blockName][0] #in out or inout
         blockNuberOfPins = pins[blockName][1]
-        for pin in range(blockNuberOfPins - 1, -1, -1):  # count down to zero
+        for pin in range(blockNuberOfPins):# - 1, -1, -1):  # count down to zero
             CreateRECT(blockName, pin)
             current_string = blockString(blockName, blockDirection, pin, blockNuberOfPins)
             outfile.write(current_string)
-        #save max values
-        if blockName is not ("VSS" or "VDD"):
-            if x_max < rectLocation['current_x2'] + pin_to_pin_x_delta:
-                x_max = rectLocation['current_x2'] + pin_to_pin_x_delta
-            if y_max < rectLocation['current_y2'] + pin_to_pin_y_delta:
-                y_max = rectLocation['current_y2'] + pin_to_pin_y_delta
+            #get max values
+            if blockName is not ("VSS" or "VDD"):
+                if x_max < rectLocation['current_x2']:
+                    x_max = rectLocation['current_x2']
+                if y_max < rectLocation['current_y2']:
+                    y_max = rectLocation['current_y2']
+
 
 
 
@@ -134,19 +135,19 @@ def goOverPins():
 
 def CreateRECT(BlockName, pinNumber):
     if BlockName == "ADDRESS":
-        rectLocation['current_x1'] = x_max
-        rectLocation['current_x2'] = x_max + x1_x2_delta
-        rectLocation['current_y1'] = y_max + pin_to_pin_y_delta * pinNumber
-        rectLocation['current_y2'] = y_max + y1_y2_delta + pin_to_pin_y_delta * pinNumber
-    elif "DATA" in BlockName:
-        rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_x2'] = x_max + x1_x2_delta + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_y1'] = y_init
-        rectLocation['current_y2'] = y_init + y1_y2_delta
+        rectLocation['current_x1'] = x_init
+        rectLocation['current_y1'] = y_max + (pin_to_pin_y_delta if pinNumber is not 0 else 0)
+        rectLocation['current_x2'] = x_init + x1_x2_delta
+        rectLocation['current_y2'] = y_max + y1_y2_delta + (pin_to_pin_y_delta if pinNumber is not 0 else 0)
+    # elif "DATA" in BlockName:
+    #     rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
+    #     rectLocation['current_y1'] = y_init
+    #     rectLocation['current_x2'] = x_max + x1_x2_delta + pin_to_pin_x_delta
+    #     rectLocation['current_y2'] = y_init + y1_y2_delta
     else:
-        rectLocation['current_x1'] = x_max + pin_to_pin_x_delta * pinNumber
-        rectLocation['current_x2'] = x_max + x1_x2_delta + pin_to_pin_x_delta * pinNumber
+        rectLocation['current_x1'] = x_max + pin_to_pin_x_delta
         rectLocation['current_y1'] = y_init
+        rectLocation['current_x2'] = x_max + x1_x2_delta + pin_to_pin_x_delta
         rectLocation['current_y2'] = y_init + y1_y2_delta
 
 
