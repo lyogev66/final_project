@@ -6,17 +6,15 @@ import getopt, sys
 ##=======================================================================================================
 ##  Define variables
 ##=======================================================================================================
-# extension = .lef
-CONST_IN = 100
-CONST_OUT = 101
-CONST_INOUT = 102
 
+# lib dependent parameter
 lef_name = "CDK_R256X16"  # change here
 output_file_name = lef_name  # "RAMB4_S16"
 address_pins = 8
 data_in_pins = 16
 data_out_pins = 16
 
+# configurable parameters for widths and heights
 x_init = 12.00
 y_init = 12.00
 x_max = 12.00
@@ -26,6 +24,17 @@ x1_x2_delta = 0.66
 y1_y2_delta = 0.66
 pin_to_pin_x_delta = 7
 pin_to_pin_y_delta = 7
+lineWidth = 5
+offsetVss = 5
+offsetVdd = 13
+
+
+# extension = .lef
+CONST_IN = 100
+CONST_OUT = 101
+CONST_INOUT = 102
+
+
 rectangle_format = "\tRECT {current_x1} {current_y1} {current_x2} {current_y2} ;"
 
 pins_list = [
@@ -50,8 +59,7 @@ pins = {
     # "VSS": [CONST_INOUT, 1],
 }
 
-# for data out pin 2 pin is 19
-# pin order is decanting
+
 rectLocation = dict()
 rectLocation['current_x1'] = x_max
 rectLocation['current_x2'] = x_max + x1_x2_delta
@@ -210,35 +218,31 @@ def VddVssString():
 def VddString():
     # defining the parameters
     vddRectLocation = dict()
-    lineWitdh = 5
-    offsetVdd = 13
-    offsetVss = 6
     # defining rectangle upeer left upper right
     #M1
     #top line
     vddRectLocation['m1_top_xll'] = 0
     vddRectLocation['m1_top_yll'] = y_max + offsetVdd
     vddRectLocation['m1_top_xur'] = x_max + offsetVdd
-    vddRectLocation['m1_top_yur'] = y_max + lineWitdh + offsetVdd
+    vddRectLocation['m1_top_yur'] = y_max + lineWidth + offsetVdd
     #bottom line
     vddRectLocation['m1_bottom_xll'] = 0
     vddRectLocation['m1_bottom_yll'] = 0
     vddRectLocation['m1_bottom_xur'] = x_max + offsetVdd
-    vddRectLocation['m1_bottom_yur'] = lineWitdh
+    vddRectLocation['m1_bottom_yur'] = lineWidth
     #M2
     #right line
-    vddRectLocation['m2_right_xll'] = x_max + offsetVdd - lineWitdh
-    vddRectLocation['m2_right_yll'] = y_max + lineWitdh + offsetVdd
+    vddRectLocation['m2_right_xll'] = x_max + offsetVdd - lineWidth
+    vddRectLocation['m2_right_yll'] = y_max + lineWidth + offsetVdd
     vddRectLocation['m2_right_xur'] = x_max + offsetVdd
-    vddRectLocation['m2_right_yur'] = lineWitdh
+    vddRectLocation['m2_right_yur'] = lineWidth
     #left
     vddRectLocation['m2_left_xll'] = 0
     vddRectLocation['m2_left_yll'] = 0
-    vddRectLocation['m2_left_xur'] = lineWitdh
-    vddRectLocation['m2_left_yur'] = y_max + lineWitdh + offsetVdd
+    vddRectLocation['m2_left_xur'] = lineWidth
+    vddRectLocation['m2_left_yur'] = y_max + lineWidth + offsetVdd
 
-    vddString = """    
-  PIN VDD
+    vddString = """  PIN VDD
     DIRECTION INOUT ;
     USE POWER ;
     SHAPE RING ;
@@ -257,30 +261,29 @@ def VddString():
 
 def VssString():
     vssRectLocation = dict()
-    lineWitdh = 5
-    offsetVss = 5
+
     # M1
     # top line
     vssRectLocation['m1_top_xll'] = 5.6
     vssRectLocation['m1_top_yll'] = y_max + offsetVss
     vssRectLocation['m1_top_xur'] = x_max + offsetVss
-    vssRectLocation['m1_top_yur'] = y_max + lineWitdh + offsetVss
+    vssRectLocation['m1_top_yur'] = y_max + lineWidth + offsetVss
     # bottom line
     vssRectLocation['m1_bottom_xll'] = 5.6
     vssRectLocation['m1_bottom_yll'] = 5.6
     vssRectLocation['m1_bottom_xur'] = x_max + offsetVss
-    vssRectLocation['m1_bottom_yur'] = lineWitdh
+    vssRectLocation['m1_bottom_yur'] = lineWidth
     # M2
     # right line
-    vssRectLocation['m2_right_xll'] = x_max + offsetVss - lineWitdh
-    vssRectLocation['m2_right_yll'] = y_max + lineWitdh + offsetVss
+    vssRectLocation['m2_right_xll'] = x_max + offsetVss - lineWidth
+    vssRectLocation['m2_right_yll'] = y_max + lineWidth + offsetVss
     vssRectLocation['m2_right_xur'] = x_max + offsetVss
-    vssRectLocation['m2_right_yur'] = lineWitdh
+    vssRectLocation['m2_right_yur'] = lineWidth
     # left
     vssRectLocation['m2_left_xll'] = 5.6
     vssRectLocation['m2_left_yll'] = 5.6
-    vssRectLocation['m2_left_xur'] = lineWitdh
-    vssRectLocation['m2_left_yur'] = y_max + lineWitdh + offsetVss
+    vssRectLocation['m2_left_xur'] = lineWidth
+    vssRectLocation['m2_left_yur'] = y_max + lineWidth + offsetVss
     # defining the parameters
 
     vssString = """    
