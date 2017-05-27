@@ -14,6 +14,7 @@ address_pins = 8
 data_in_pins = 16
 data_out_pins = 16
 
+
 # configurable parameters for widths and heights
 x_init = 12.00
 y_init = 12.00
@@ -74,9 +75,11 @@ rectLocation['current_y2'] = y_max + y1_y2_delta
 
 
 
+
+
 def main(**kwargs):
     ""
-    global outfile
+    global outfile,tempFile
     global out_dict, in_dict, clk_dict, false_path_list, false_path_dict, files_dict
     import glob, os
     path = os.getcwd()
@@ -91,14 +94,30 @@ def main(**kwargs):
                 files_dict[file_name] = open(file, 'r')
 
     outfile = open(output_file_name + ".lef", "w")
+    tempFile = open(output_file_name+ "temp.lef", "w")
 
-    #writing the starting block
-    start_block(files_dict['start_block'])
     #wringing the rest of the file
     goOverPins()
-
+    tempFile.close()
+    copyFile()
     print "max_x = {} max_y = {}".format(x_max, y_max)
     outfile.close()
+
+
+
+def copyFile():
+
+    import os
+    tempFileName = outfile.name.replace(".lef", "temp.lef")
+    tempFile = open(tempFileName, "r")
+    start_block(files_dict['start_block'])
+    # restart The tempFile
+    for line in tempFile:
+        outfile.write(line)
+    tempFile.close()
+    os.remove(tempFileName)
+
+
 
 
 def start_block(myfile):
@@ -111,7 +130,7 @@ def start_block(myfile):
         if orig_line_name in line:
             outfile.write(line.replace(orig_line_name, lef_name))
         elif "SIZE" in line:
-            myMatch = re.sub(r'\d+[.,]?\d+ (\w+) \d+[.,]?\d+', r'X_VALUE_SWITCH_LATER \1 Y_VALUE_SWITCH_LATER', line)
+            myMatch = re.sub(r'\d+[.,]?\d+ (\w+) \d+[.,]?\d+', r'{} \1 {}'.format(x_max,y_max), line)
             if myMatch:
                 outfile.write(myMatch)
             else:
@@ -128,7 +147,7 @@ def goOverPins():
         for pin in range(blockNuberOfPins):# - 1, -1, -1):  # count down to zero
             CreateRECT(blockName, pin)
             current_string = blockString(blockName, blockDirection, pin, blockNuberOfPins)
-            outfile.write(current_string)
+            tempFile.write(current_string)
             #get max values
             if blockName is not ("VSS" or "VDD"):
                 if x_max < rectLocation['current_x2']:
@@ -310,6 +329,7 @@ def OBSString():
     obsRectLocation['yLowerLeft'] = y_init
     obsRectLocation['xUpperRight'] = x_max
     obsRectLocation['yUpperRight'] = y_max
+    obsRectLocation['lef_name'] = lef_name
     obsString="""
   OBS
     LAYER Metal1 ;
@@ -325,7 +345,7 @@ def OBSString():
     LAYER Metal6 ;
       RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
   END
-END CDK_R512x16
+END {lef_name}
 
 END LIBRARY
     """.format(**obsRectLocation)
