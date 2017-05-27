@@ -9,7 +9,7 @@ import getopt, sys
 
 # lib dependent parameter
 lef_name = "CDK_R256X16"  # change here
-output_file_name = lef_name  # "RAMB4_S16"
+output_file_name = "RAMB4_S16"  # "RAMB4_S16"
 address_pins = 8
 data_in_pins = 16
 data_out_pins = 16
@@ -92,9 +92,12 @@ def main(**kwargs):
             if file.endswith(".txt"):
                 file_name = file.replace(".txt", "")
                 files_dict[file_name] = open(file, 'r')
+    if not os.path.exists("./lef"):
+        os.makedirs("./lef/")
+    dir_output_file = "./lef/" + output_file_name
 
-    outfile = open(output_file_name + ".lef", "w")
-    tempFile = open(output_file_name+ "temp.lef", "w")
+    outfile = open(dir_output_file + ".lef", "w")
+    tempFile = open(dir_output_file+ "temp.lef", "w")
 
     #wringing the rest of the file
     goOverPins()
@@ -125,7 +128,7 @@ def start_block(myfile):
     rigths = """##
 ##  Automaticly created by Ofir Even-chen and Yogev Laks Script
 ##"""
-    outfile.write(rigths)
+    #outfile.write(rigths)
     for line in myfile:
         if orig_line_name in line:
             outfile.write(line.replace(orig_line_name, lef_name))
@@ -210,13 +213,13 @@ def blockString(block_type, direction, pin_number, blockPinNumber):
     DIRECTION {direction} ;
     USE SIGNAL ;
   PORT
-      LAYER Metal5 ;
+      LAYER M5 ;
 {rect_string}
-      LAYER Metal6 ;
+      LAYER M6 ;
 {rect_string}
-      LAYER Metal3 ;
+      LAYER M3 ;
 {rect_string}
-      LAYER Metal4 ;
+      LAYER M4 ;
 {rect_string}
     END""".format(**parameters)
 
@@ -266,10 +269,10 @@ def VddString():
     USE POWER ;
     SHAPE RING ;
     PORT
-      LAYER Metal1 ;
+      LAYER M1 ;
         RECT {m1_top_xll} {m1_top_yll} {m1_top_xur} {m1_top_yur} ;
         RECT {m1_bottom_xll} {m1_bottom_yll} {m1_bottom_xur} {m1_bottom_yur} ;
-      LAYER Metal2 ;
+      LAYER M2 ;
         RECT {m2_right_xll} {m2_right_yll} {m2_right_xur} {m2_right_yur} ;
         RECT {m2_left_xll} {m2_left_yll} {m2_left_xur} {m2_left_yur} ;
     END
@@ -311,10 +314,10 @@ def VssString():
     USE GROUND ;
     SHAPE RING ;
     PORT
-      LAYER Metal1 ;
+      LAYER M1 ;
         RECT {m1_top_xll} {m1_top_yll} {m1_top_xur} {m1_top_yur} ;
         RECT {m1_bottom_xll} {m1_bottom_yll} {m1_bottom_xur} {m1_bottom_yur} ;
-      LAYER Metal2 ;
+      LAYER M2 ;
         RECT {m2_right_xll} {m2_right_yll} {m2_right_xur} {m2_right_yur} ;
         RECT {m2_left_xll} {m2_left_yll} {m2_left_xur} {m2_left_yur} ;
     END
@@ -332,17 +335,17 @@ def OBSString():
     obsRectLocation['lef_name'] = lef_name
     obsString="""
   OBS
-    LAYER Metal1 ;
+    LAYER M1 ;
       RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
-    LAYER Metal2 ;
+    LAYER M2 ;
       RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
-    LAYER Metal3 ;
+    LAYER M3 ;
       RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
-    LAYER Metal4 ;
+    LAYER M4 ;
       RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
-    LAYER Metal5 ;
+    LAYER M5 ;
       RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
-    LAYER Metal6 ;
+    LAYER M6 ;
       RECT {xLowerLeft} {yLowerLeft} {xUpperRight} {yUpperRight} ;
   END
 END {lef_name}
