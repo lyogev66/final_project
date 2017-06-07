@@ -6,14 +6,15 @@ import getopt, sys
 ##  Define variables
 ##=======================================================================================================
 
-output_file_name="RAMB4_S16"
-lib_name = "CDK_R256X16"
-address_pins = 8
-data_in_pins = 16
-data_out_pins = 16
+output_file_name="RAMB4_S1"
+lib_name = "CDK_R4096X1"
+address_pins = 12
+data_in_pins = 1
+data_out_pins = 1
 
 
-input_pins_dict = {"DATA_IN": data_in_pins,"ADDRESS": address_pins,"CLOCK":1}
+# output_related_pins = {"DATA_IN": data_in_pins, "ADDRESS": address_pins, "CLOCK":1}
+output_related_pins = {"CLOCK":1}
 
 
 ##=======================================================================================================
@@ -52,16 +53,20 @@ def main(**kwargs):
     # # ...
     # ## handle command line arguments:
 
-
-    if "\\tutorial_RTL\\LIB" not in path:
-        path = path + "\\tutorial_RTL\\LIB"
-        os.chdir(path)
+    print path
+    # if "\\tutorial_RTL\\LIB" not in path:
+    #     path = path + "\\tutorial_RTL\\LIB"
+    #     os.chdir(path)
     print path
 
     # if len(kwargs)<1:
     #     print "wrong input"
     files_dict = {}
-    outfile = open(output_file_name+".lib", "w")
+    if not os.path.exists(path+"\out/"):
+        os.mkdir(path+"/out/")
+
+
+    outfile = open(path+"/out/"+output_file_name+".lib", "w")
     for myfile in glob.glob("*.lib"):
         files_dict[myfile.replace(".lib", "")] = open(myfile, "r")
 
@@ -74,7 +79,7 @@ def main(**kwargs):
     start_bus("DATA_IN", bus_number=1, bit_width=data_in_pins, bit_from=data_in_pins - 1)
     inblock(files_dict['DATA_IN_block'], data_in_pins)
     start_bus("DATA_OUT", bus_number=2, bit_width=data_out_pins, bit_from=data_out_pins - 1)
-    outblock(files_dict['DATA_OUT_block'], data_out_pins, input_pins_dict)
+    outblock(files_dict['DATA_OUT_block'], data_out_pins, output_related_pins)
     end(files_dict['File_end_block'])
     outfile.close()
 
@@ -147,6 +152,8 @@ def outblock(input_file, data_out_pins, input_pins_dict, str_a_change="<RELATED_
         outfile.write(out_pin_string)
 
         for input_pin_name in input_pins_dict.keys():  # each_input
+            # if "DATA_" in input_pin_name:
+            #     continue
             if input_pins_dict[input_pin_name]>1:
                 for input_pin_num in range(input_pins_dict[input_pin_name]):  # each pin in input
                     input_file.seek(0)
